@@ -33,28 +33,64 @@ class GameOfLife {
         });
 
         let isMouseDown = false;
+        this.lastCell = null;
 
+        // Mouse events
         this.canvas.addEventListener('mousedown', (e) => {
+            e.preventDefault();
             isMouseDown = true;
-            this.handleMouseEvent(e);
+            this.handlePointerEvent(e);
         });
 
         this.canvas.addEventListener('mousemove', (e) => {
+            e.preventDefault();
             if (isMouseDown) {
-                this.handleMouseEvent(e);
+                this.handlePointerEvent(e);
             }
         });
 
-        this.canvas.addEventListener('mouseup', () => {
+        this.canvas.addEventListener('mouseup', (e) => {
+            e.preventDefault();
             isMouseDown = false;
+            this.lastCell = null;
         });
 
-        this.canvas.addEventListener('mouseleave', () => {
+        this.canvas.addEventListener('mouseleave', (e) => {
+            e.preventDefault();
             isMouseDown = false;
+            this.lastCell = null;
+        });
+
+        // Touch events
+        this.canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            isMouseDown = true;
+            const touch = e.touches[0];
+            this.handlePointerEvent(touch);
+        });
+
+        this.canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (isMouseDown) {
+                const touch = e.touches[0];
+                this.handlePointerEvent(touch);
+            }
+        });
+
+        this.canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            isMouseDown = false;
+            this.lastCell = null;
+        });
+
+        this.canvas.addEventListener('touchcancel', (e) => {
+            e.preventDefault();
+            isMouseDown = false;
+            this.lastCell = null;
         });
     }
 
-    handleMouseEvent(e) {
+    handlePointerEvent(e) {
         const rect = this.canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
@@ -183,6 +219,17 @@ const speedSlider = document.getElementById('speed');
 const speedValue = document.getElementById('speedValue');
 const cellSizeSlider = document.getElementById('cellSize');
 const cellSizeValue = document.getElementById('cellSizeValue');
+const toggleControlsBtn = document.getElementById('toggleControls');
+const controlsPanel = document.querySelector('.controls-panel');
+
+// Toggle controls visibility
+let isPanelVisible = true;
+
+toggleControlsBtn.addEventListener('click', () => {
+    isPanelVisible = !isPanelVisible;
+    controlsPanel.classList.toggle('hidden');
+    toggleControlsBtn.classList.toggle('panel-hidden');
+});
 
 // Event listeners for controls
 startStopBtn.addEventListener('click', () => {

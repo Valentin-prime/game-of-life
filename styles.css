@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -12,6 +13,7 @@ body {
     font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
+    touch-action: none;
 }
 
 #gameCanvas {
@@ -20,7 +22,33 @@ body {
     background-color: #000;
 }
 
-.controls {
+.toggle-controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    border: none;
+    border-radius: 5px 5px 0 0;
+    padding: 8px 15px;
+    cursor: pointer;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+    transition: bottom 0.3s ease;
+    display: none;
+}
+
+.toggle-controls .arrow {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.toggle-controls.panel-hidden .arrow {
+    transform: rotate(180deg);
+}
+
+.controls-panel {
     position: fixed;
     bottom: 20px;
     left: 50%;
@@ -29,8 +57,31 @@ body {
     padding: 15px;
     border-radius: 10px;
     display: flex;
+    flex-direction: column;
     gap: 15px;
-    align-items: center;
+    max-width: 95%;
+    width: auto;
+    backdrop-filter: blur(5px);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.controls-panel.hidden {
+    transform: translateX(-50%) translateY(100%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.slider-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 button {
@@ -42,6 +93,8 @@ button {
     cursor: pointer;
     font-size: 14px;
     transition: background-color 0.3s;
+    min-width: 80px;
+    touch-action: manipulation;
 }
 
 button:hover {
@@ -69,12 +122,53 @@ button:hover {
     align-items: center;
     gap: 10px;
     color: white;
+    flex-wrap: wrap;
 }
 
 input[type="range"] {
-    width: 100px;
+    flex: 1;
+    min-width: 100px;
+    max-width: 200px;
 }
 
 span {
     min-width: 70px;
+}
+
+@media (max-width: 600px) {
+    .toggle-controls {
+        display: flex;
+        bottom: 10px;
+        width: 50px;
+        height: 30px;
+        padding: 5px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .controls-panel {
+        bottom: 45px;
+        padding: 10px;
+    }
+
+    button {
+        padding: 10px;
+        font-size: 16px;
+        flex: 1;
+    }
+
+    .speed-control, .cell-size-control {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+
+    input[type="range"] {
+        width: 100%;
+        max-width: none;
+    }
+
+    span {
+        text-align: center;
+    }
 } 
